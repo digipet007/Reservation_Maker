@@ -10,9 +10,18 @@ module.exports = function (app) {
     app.get('/api/waitlist', function (req, res) {
         res.json(waitingListData);  //how does it know what table data is??
     })
+    //post route will allow users make posts to api to create new reservations
+    app.post('/api/tables', function (req, res) {
+        if(tableData.length < 5) {
+            tableData.push(req.body);
+            //boolean values set up to trigger message to users
+            res.json(true);
+        } else {
+            waitingListData.push(req.body);
+            res.json(false);
+        }
+    })
 }
-
-//post route will allow users make posts to api to create new reservations
 
 
 
