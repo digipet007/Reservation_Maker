@@ -53,7 +53,13 @@
 	    <footer class="footer">
 	      <div class="container">
 	      	<p>Control Panel</p>
-	        <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a></p>
+	        <p>
+            <a href="/api/clear" id="clear">Clear Table</a> 
+            | 
+            <a href="/api/tables">API Table Link</a> 
+            | 
+            <a href="/api/waitlist">API Wait List</a>
+          </p>
 	      </div>
 	    </footer>
 
@@ -62,7 +68,7 @@
 </body>
 
 <script type="text/javascript">
-  //AJAX call will gradata from API route and allow us todisplay ot on the html page
+  //AJAX call will grab data from API route and allow us to display on the html page
   function runTableQuery() {
     //origin is localhost:8080
     var currentURL = window.location.origin;
@@ -88,6 +94,12 @@
         $("#tablenum-"+i+1).append("<h2><span class='label label-primary'>" + tableNumber + "</span> | " + tableData[i].customerID + "</h2>");
       }
     });
+  }
+
+  //clears both tables data and waiting list data
+  function clearTable() {
+    var currentURL = window.location.origin;
+    $.ajax({url: currentURL + "/api/clear", method: "POST"})
   }
 
   function runWaitListQuery() {
@@ -117,6 +129,13 @@
     });
   }
 
+  $("#clear").on('click', function(){
+    var currentURL = window.location.origin;
+    alert("Clearing data...");
+    clearTable();
+    location.reload();
+  })
+  
   runWaitListQuery();
   runTableQuery();
 </script>

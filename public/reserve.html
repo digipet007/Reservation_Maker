@@ -21,8 +21,9 @@
 			<br>
 
 			<div class="text-center">
-				<a href="/tables.html"><button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-list-alt"></span> View Tables</button></a>
-				<a href="/home.html"><button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-home"></span></button></a>
+				<a href="/tables"><button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-list-alt"></span> View Tables</button></a>
+
+				<a href="/home"><button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-home"></span></button></a>
 			</div>
 		</div>
 
@@ -68,7 +69,13 @@
 		</div>
 	    <footer class="footer">
 	      <div class="container">
-	        <p><a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a> </p>
+	        <p>
+				<a href="/api/clear" id="clear">Clear Table</a> 
+				| 
+				<a href="/api/tables">API Table Link</a> 
+				| 
+				<a href="/api/waitlist">API Wait List</a> 
+			</p>
 	      </div>
 	    </footer>
 
@@ -79,21 +86,38 @@
 
 $(".submit").on("click", function() {
   event.preventDefault();
-  // var newReservation = {
-  //   customerName: $("#reserve_name").val().trim,
-  //   phoneNumber: $("#reserve_phone").val().trim,
-  //   customerEmail: $("#reserve_email").val().trim,
-  //   customerID: $("#reserve_uniqueID").val().trim,
-  // };
-  var customerName = $("#reserve_name").val().trim;
-  var phoneNumber= $("#reserve_phone").val().trim;
-  var customerEmail= $("#reserve_email").val().trim;
-  var customerID= $("#reserve_uniqueID").val().trim; //yields similar problem as the object
-  // console.log(newReservation);
-  console.log(customerName);
-  console.log(phoneNumber);
-  console.log(customerEmail);
-  console.log(customerID);
+  var newReservation = {
+    customerName: $("#reserve_name").val().trim(),
+    phoneNumber: $("#reserve_phone").val().trim(),
+    customerEmail: $("#reserve_email").val().trim(),
+    customerID: $("#reserve_uniqueID").val().trim(),
+  };
+
+  console.log(newReservation.customerName);
+
+  var currentURL = window.location.origin;
+
+  //AJAX post request via jQuery fires off directions in API routes file
+  //newReservation is the request, passed into the function in api-routes.js, this function below is passed in as the response in api-routes.js
+  //The server recieves post request from the user
+  //and responds by sending array push in api-routes.js
+  //the the data comes back, the res.json, as either true or false (as per api-routes.js function), 
+  //which triggers an alert to user whether or not they got a table.
+  $.post(currentURL + "/api/tables", newReservation, function(data) {
+
+	if (data) {
+		alert("Your reservation has been booked");
+	}
+	if (!data) {
+		alert("sorry you are on the waitlist");
+	}
+
+	//reset the form values
+	$("#reserve_name").val("");
+	$("#reserve_phone").val("");
+	$("#reserve_email").val("");
+	$("#reserve_uniqueID").val("");
+  });
 })
 
 </script>
